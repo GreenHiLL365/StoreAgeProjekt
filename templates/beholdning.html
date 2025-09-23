@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beholdning</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+.table td, .table th { text-align:center; }
+</style>
+</head>
+<body class="p-4">
+<div class="container">
+  <h1 class="mb-4">Beholdning</h1>
+
+  <!-- Formular til filtrering og eksport -->
+  <form method="POST" class="mb-3">
+    <div class="row g-3 align-items-end">
+      <div class="col-md-3">
+        <label>Start dato</label>
+        <input type="date" name="start_dato" class="form-control" value="{{ start_dato }}">
+      </div>
+      <div class="col-md-3">
+        <label>Slut dato</label>
+        <input type="date" name="slut_dato" class="form-control" value="{{ slut_dato }}">
+      </div>
+      <div class="col-md-3">
+        <button type="submit" class="btn btn-primary">Filtrer</button>
+      </div>
+      <div class="col-md-3">
+        <button formaction="{{ url_for('beholdning_export') }}" formmethod="post" class="btn btn-success">Eksport CSV</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Besked hvis ingen data findes -->
+  {% if rækker|length == 0 %}
+    <p class="text-warning">Ingen data i den valgte periode.</p>
+  {% endif %}
+
+  <!-- Graf -->
+  {% if graf_url %}
+    <div class="mb-4">
+      <img src="data:image/png;base64,{{ graf_url }}" class="img-fluid">
+    </div>
+  {% endif %}
+
+  <!-- Tabel med beholdning -->
+  {% if rækker|length > 0 %}
+    <table class="table table-bordered table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Måned</th>
+          <th>År</th>
+          <th>Optalt af</th>
+          {% for m in materialer %}
+            {% if m != "kul_bigbag" %}
+              <th>{{ m.replace("_"," ").capitalize() }}</th>
+            {% endif %}
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in rækker %}
+          <tr>
+            <td>{{ r.id }}</td>
+            <td>{{ r.registeret_maaned }}</td>
+            <td>{{ r.registeret_aar }}</td>
+            <td>{{ r.optalt_af }}</td>
+            {% for m in materialer %}
+              {% if m != "kul_bigbag" %}
+                {% if m == "kul_sække" %}
+                  <td>{{ r.kul_total_kg_formatted }}</td>
+                {% else %}
+                  <td>{{ r[m + "_total_kg_formatted"] }}</td>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+
+</div>
+</body>
+</html>

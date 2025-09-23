@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <title>Lagerstyring</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .table td input { width: 100%; }
+    .table-container { max-height: 70vh; overflow-y: auto; }
+  </style>
+</head>
+<body class="p-4">
+<div class="container">
+
+<h1 class="mb-4">Lagerstyring</h1>
+
+<!-- Excel upload -->
+<form method="POST" enctype="multipart/form-data" class="mb-4">
+  <div class="row g-3 align-items-end">
+    <div class="col-md-6">
+      <label class="form-label">Vælg Excel-fil</label>
+      <input type="file" name="excel_file" class="form-control">
+    </div>
+    <div class="col-md-2">
+      <button type="submit" name="upload_file" class="btn btn-success">Upload fil</button>
+    </div>
+  </div>
+</form>
+
+<form method="POST" name="save_form">
+
+<div class="row mb-3">
+  <div class="col-md-4">
+    <label class="form-label">Optællingsdato</label>
+    <input type="date" name="optalt_dato" class="form-control" value="{{ lager.optalt_dato }}">
+    {% if lager.raa_dato %}
+      <div class="mt-1"><small class="text-muted">Rå dato fra Excel: {{ lager.raa_dato }}</small></div>
+    {% endif %}
+  </div>
+  <div class="col-md-2">
+    <label class="form-label">Måned</label>
+    <input type="text" name="registeret_maaned" class="form-control" value="{{ lager.registeret_maaned or '' }}">
+  </div>
+  
+  <div class="col-md-2">
+    <label class="form-label">År</label>
+    <input type="text" name="registeret_aar" class="form-control" value="{{ lager.registeret_aar or '' }}">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label">Optalt af</label>
+    <input type="text" name="optalt_af" class="form-control" value="{{ lager.optalt_af or '' }}">
+  </div>
+</div>
+
+<!-- Materialer tabel -->
+<div class="table-container mb-3">
+  <table class="table table-bordered table-striped">
+    <thead class="table-light">
+      <tr>
+        <th>Materiale</th>
+        <th>Antal pr. palle</th>
+        <th>Antal hele paller</th>
+        <th>Antal løse enheder</th>
+        <th>Vægt pr. enhed</th>
+        <th>Antal enheder i alt</th>
+        <th>Optalt lager i kg</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for m in materialer %}
+      <tr>
+        <td>{{ m.replace("_"," ").capitalize() }}</td>
+        {% for f in ["pr_palle","hele_paller","loese","pr_enhed","total_enheder","total_kg"] %}
+        <td>
+          {% if f in ['pr_palle','pr_enhed','total_kg'] %}
+            <input type="number" step="any" name="{{ m }}_{{ f }}" value="{{ lager[m + '_' + f] or '' }}">
+          {% elif f in ['hele_paller','loese','total_enheder'] %}
+            <input type="number" step="1" name="{{ m }}_{{ f }}" value="{{ lager[m + '_' + f] or '' }}">
+          {% else %}
+            <input type="text" name="{{ m }}_{{ f }}" value="{{ lager[m + '_' + f] or '' }}">
+          {% endif %}
+        </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="d-flex align-items-center mb-4">
+  <button type="submit" name="save_form" class="btn btn-primary me-3">Gem data</button>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for msg in messages %}
+        {% if 'Data gemt i databasen' in msg %}
+          <span style="color: green; font-size: 1.5rem;">&#10003;</span>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+</div>
+
+</form>
+</div>
+</body>
+</html>
