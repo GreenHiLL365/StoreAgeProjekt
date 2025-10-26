@@ -1,0 +1,31 @@
+# Python cache og midlertidige filer
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtuelle miljøer
+venv/
+env/
+
+# Miljøvariabler
+.env
+.env.*
+
+# IDE og editor konfiguration
+.vscode/
+.idea/
+*.swp
+
+# Logfiler og output
+*.log
+*.sqlite3
+*.db
+
+# OS-specifikke filer
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
