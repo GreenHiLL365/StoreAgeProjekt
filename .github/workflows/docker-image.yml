@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  IMAGE_NAME: produktionapp
+  IMAGE_NAME: officeapp
 
 jobs:
   build-and-deploy:
@@ -23,9 +23,9 @@ jobs:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
 
-      - name: Build Docker image
+      - name: Build Docker image for office
         run: |
-          docker build -t ${{ secrets.REGISTRY_URL }}/${{ env.IMAGE_NAME }}:${{ github.sha }} .
+          docker build -f office/Dockerfile -t ${{ secrets.REGISTRY_URL }}/office:${{ github.sha }} office
 
       - name: Push Docker image
         run: |
@@ -37,3 +37,5 @@ jobs:
           app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           images: ${{ secrets.REGISTRY_URL }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+
