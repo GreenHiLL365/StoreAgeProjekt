@@ -31,6 +31,6 @@ jobs:
           context: ./produktion
           file: ./produktion/Dockerfile
           push: true
-          tags: mikkeldev/produktion:latest
+          tags: greenhill86/produktion:latest
 
 
