@@ -31,4 +31,4 @@ jobs:
           context: ./office
           file: ./office/Dockerfile
           push: true
-          tags: mikkeldev/beholdning:latest
+          tags: greenhill86/beholdning:latest
