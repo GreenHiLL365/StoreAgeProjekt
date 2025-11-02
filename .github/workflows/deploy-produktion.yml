@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'storeageprojekt/produktion/**'
+      - 'produktion/**'
   workflow_dispatch:
 
 jobs:
@@ -28,8 +28,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./storeageprojekt/produktion
-          file: ./storeageprojekt/produktion/Dockerfile
+          context: ./produktion
+          file: ./produktion/Dockerfile
           push: true
           tags: mikkeldev/produktion:latest
 

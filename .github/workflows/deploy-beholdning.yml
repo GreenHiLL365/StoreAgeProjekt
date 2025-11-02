@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'storeageprojekt/office/**'
+      - 'office/**'
   workflow_dispatch:
 
 jobs:
@@ -28,7 +28,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./storeageprojekt/office
-          file: ./storeageprojekt/office/Dockerfile
+          context: ./office
+          file: ./office/Dockerfile
           push: true
           tags: mikkeldev/beholdning:latest
