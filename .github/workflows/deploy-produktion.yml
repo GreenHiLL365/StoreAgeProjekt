@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'storeageprojekt/produktion/**'
+  workflow_dispatch:
 
 jobs:
   build-and-push:
@@ -31,3 +32,5 @@ jobs:
           file: ./storeageprojekt/produktion/Dockerfile
           push: true
           tags: mikkeldev/produktion:latest
+
+

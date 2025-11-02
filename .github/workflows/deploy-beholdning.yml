@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'storeageprojekt/office/**'
+  workflow_dispatch:
 
 jobs:
   build-and-push:
